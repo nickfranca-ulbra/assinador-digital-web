@@ -25,6 +25,3 @@ class Assinatura extends Model
     }
     
 }
-   
-
-

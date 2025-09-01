@@ -123,4 +123,19 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+        /*
+    |--------------------------------------------------------------------------
+    | Application Keys
+    |--------------------------------------------------------------------------
+    |
+    | Chaves RSA para assinatura digital. Elas serão definidas pelo
+    | KeyPairServiceProvider.
+    |
+    */
+
+    'private_key' => env('APP_PRIVATE_KEY', null),
+    'public_key'  => env('APP_PUBLIC_KEY', null),
+
+
 ];
+
