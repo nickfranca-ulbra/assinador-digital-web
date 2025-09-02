@@ -15,11 +15,13 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        
         $request->validate([
             'name'      => 'required|string|max:255',
             'email'     => 'required|email|unique:users,email',
             'password'  => 'required|string|min:6',
+        ]);
+        return back()->withErrors([
+            'email' => 'Já possui um usuário cadastrado nesse email.',
         ]);
 
         $keyPair = openssl_pkey_new([
