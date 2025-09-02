@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('log_verificacaos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_assinatura')->constrained('assinaturas')->cascadeOnDelete();
+            $table->foreignId('id_assinatura')->nullable()->constrained('assinaturas')->cascadeOnDelete();
             $table->string('status');
             $table->ipAddress('ip')->nullable();
             $table->string('agente')->nullable();

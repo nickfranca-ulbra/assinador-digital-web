@@ -1,6 +1,6 @@
 
 ### Passo a passo
-Clone Repositório
+Clone Repositório utilizando UBUNTU 24.04.1 LTS
 
 ```sh
 git clone https://github.com/nickfranca-ulbra/assinador-digital-web.git
@@ -43,21 +43,22 @@ Suba os containers do projeto
 ```sh
 docker-compose up -d
 ```
-
-
 Acessar o container
 ```sh
 docker-compose exec assinador-digital-web bash
 ```
-
 
 Instalar as dependências do projeto
 ```sh
 composer install
 ```
 
+Rodar as tabelas do banco
+```sh
+php artisan migrate
+```
 
-Gerar a key do projeto Laravel
+(Se necessário) Gerar a key do projeto Laravel
 ```sh
 php artisan key:generate
 ```
@@ -65,3 +66,6 @@ php artisan key:generate
 
 Acessar o projeto
 [http://localhost:9001](http://localhost:9001)
+
+Acessar o banco de dados (use o acesso e senha definidos no .env)
+[http://localhost:9002](http://localhost:9002)

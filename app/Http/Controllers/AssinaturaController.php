@@ -21,13 +21,10 @@ class AssinaturaController extends Controller
 
         $user = Auth::user();
 
-        // Calcular hash SHA-256
         $hash = hash('sha256', $request->texto);
 
-        // Assinar hash com chave privada
         openssl_sign($hash, $assinatura, $user->chave_privada, OPENSSL_ALGO_SHA256);
 
-        // Salvar assinatura
         $assinaturaModel = Assinatura::create([
             'id_user'   => $user->id,
             'texto'     => $request->texto,
@@ -36,12 +33,23 @@ class AssinaturaController extends Controller
             'algoritmo'  => 'SHA-256',
         ]);
 
-        return redirect()->route('sign', $assinaturaModel->id)
-                         ->with('success', 'Texto assinado com sucesso!');
+        return redirect()->route('sign')
+                         ->with('success', 'Texto assinado com sucesso! O ID da sua assinatura é: '. $assinaturaModel->id);
     }
     public function show($id)
     {
         $assinatura = Assinatura::findOrFail($id);
         return view('assinatura', compact('assinatura'));
     }
+
+    public function mySignatures()
+    
+{
+    $user = Auth::user();
+    $assinaturas = Assinatura::where('id_user', $user->id)->get();
+
+
+    return view('minhasAssinaturas', compact('assinaturas'));
+}
+
 }
