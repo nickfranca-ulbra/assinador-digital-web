@@ -16,7 +16,8 @@ Route::get('/logout', [Auth::class, 'logout'])->name('logout');
 Route::get('/register', [UserController::class, 'user'])->name('register');
 Route::post('/register', [UserController::class, 'store'])->name('register.store');
 Route::get('/verify', [LogVerificacaoController::class, 'log_verificacao'])->name('verify');
-Route::post('/verify-check', [LogVerificacaoController::class, 'verify'])->name('verify.check');
+Route::post('/verify-id', [LogVerificacaoController::class, 'verifyById'])->name('verify.id');
+Route::post('/verify-text', [LogVerificacaoController::class, 'verifyByText'])->name('verify.text');
 
 Route::middleware(['auth'])->group(function () {
     // Assinar
