@@ -89,3 +89,5 @@ Acessar o projeto
 
 Acessar o banco de dados (use o acesso e senha definidos no .env)
 [http://localhost:9002](http://localhost:9002)
+
+Após acessar o banco, use o usuario e senha definidos no .env e entre. Após isso, insira o arquivo que está no Releases, que corresponde ao banco populado.
