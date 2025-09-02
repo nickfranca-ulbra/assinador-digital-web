@@ -15,9 +15,12 @@ Crie o Arquivo .env
 ```sh
 cp .env.example .env
 ```
+```sh
+code .
+```
 
 
-Atualize as variáveis de ambiente do arquivo .env
+Dentro do código do projeto atualize as variáveis de ambiente do arquivo .env
 ```dosini
 APP_NAME=assinador-digital-web
 APP_ENV=local
@@ -50,7 +53,12 @@ REDIS_PASSWORD=null
 REDIS_PORT=6379
 
 ```
+No Dockerfile, troque para o seu user
 
+```dosini
+ARG user=
+ARG uid=1000
+```
 
 Suba os containers do projeto
 ```sh
