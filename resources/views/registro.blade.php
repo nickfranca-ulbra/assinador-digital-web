@@ -5,7 +5,7 @@
 @section('title', 'Cadastro de Usuário')
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="d-flex justify-content-center  align-items-center vh-100">
         <div class="card shadow p-4 w-50">
             <h1 class="mb-4 text-center">Cadastre-se</h1>
 

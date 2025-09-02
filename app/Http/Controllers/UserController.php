@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -16,13 +16,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|string|min:6',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
         ]);
-        return back()->withErrors([
-            'email' => 'Já possui um usuário cadastrado nesse email.',
-        ]);
+
 
         $keyPair = openssl_pkey_new([
             'private_key_bits' => 2048,
@@ -32,14 +30,28 @@ class UserController extends Controller
         openssl_pkey_export($keyPair, $privateKey);
         $publicKey = openssl_pkey_get_details($keyPair)['key'];
 
-        $user = User::create([
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'password'      => bcrypt($request->password),
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
             'chave_privada' => $privateKey,
             'chave_publica' => $publicKey,
         ]);
 
         return redirect()->route('sign')->with('success', 'Usuário cadastrado com sucesso!');
     }
+
+    public function downloadPublicKey()
+{
+    $user = Auth::user();
+
+    $filename = 'public_key_' . $user->id . '.pem';
+    $headers = [
+        'Content-Type' => 'application/x-pem-file',
+        'Content-Disposition' => "attachment; filename={$filename}"
+    ];
+
+    return response($user->chave_publica, 200, $headers);
+}
+
 }

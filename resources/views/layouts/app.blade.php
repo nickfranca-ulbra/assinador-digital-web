@@ -14,6 +14,8 @@
             @if (auth()->check())
                 <a class="btn btn-outline-light me-2" href="{{ route('sign') }}">Assinar</a>
             <a class="btn btn-outline-light me-2" href="{{ route('verify') }}">Verificar</a>
+            <a class="btn btn-outline-light me-2" href="{{ route('my.signatures') }}">Minhas assinaturas</a>
+            <a class="btn btn-outline-light me-2" href="{{ route('my.publickey') }}">Minhas chave pública</a>
             <a class="btn btn-outline-light me-2" href="{{ route('logout') }}">Sair</a>
             @else
                 <a class="btn btn-outline-light me-2" href="{{ route('verify') }}">Verificar</a>

@@ -8,39 +8,62 @@ use Illuminate\Http\Request;
 
 class LogVerificacaoController extends Controller
 {
-      public function log_verificacao(Request $request)
+       public function log_verificacao()
     {
-         $request->validate([
-        'id' => 'required|integer',
-    ]);
-
-    $assinatura = Assinatura::find($request->id);
-    if (!$assinatura) {
-        return back()->with('error', 'Assinatura não encontrada.');
+        return view('verificacao'); 
     }
 
-    $user = $assinatura->user;
+    public function verify(Request $request)
+    {
+        $request->validate([
+            'id' => 'nullable|integer',
+            'texto' => 'required_without:id|string',
+            'assinatura' => 'required_with:texto|string',
+        ]);
 
-    // Verificar assinatura
-    $hash = hash('sha256', $assinatura->texto);
-    $assinaturaBinaria = base64_decode($assinatura->assinatura);
-    $valida = openssl_verify($hash, $assinaturaBinaria, $user->chave_publica, OPENSSL_ALGO_SHA256);
+        $status = 'INVÁLIDA';
+        $assinaturaRecord = null;
 
-    $status = $valida === 1 ? 'VÁLIDA' : 'INVÁLIDA';
+        if ($request->id) {
+            $assinaturaRecord = Assinatura::find($request->id);
+        }
+        elseif ($request->texto && $request->assinatura) {
+            $assinaturas = Assinatura::where('texto', $request->texto)->get();
 
+            foreach ($assinaturas as $assinatura) {
+                $decodedSig = base64_decode($request->assinatura);
+                $hash = hash('sha256', $request->texto);
+                $verify = openssl_verify($hash, $decodedSig, $assinatura->user->chave_publica, OPENSSL_ALGO_SHA256);
+                if ($verify === 1) {
+                    $assinaturaRecord = $assinatura;
+                    break;
+                }
+            }
+        }
+        if ($assinaturaRecord) {
+            $decodedSig = base64_decode($assinaturaRecord->assinatura);
+            $hash = hash('sha256', $assinaturaRecord->texto);
 
-    $log = \App\Models\LogVerificacao::create([
-        'assinatura_id' => $assinatura->id,
-        'status'        => $status,
-        'verificado_em' => now(),
-    ]);
+            $verify = openssl_verify(
+                $hash,
+                $decodedSig,
+                $assinaturaRecord->user->chave_publica,
+                OPENSSL_ALGO_SHA256
+            );
 
-    return view('verify_result', [
-        'status'      => $status,
-        'signatario'  => $user->nome,
-        'algoritmo'   => $assinatura->algoritmo,
-        'data_hora'   => $assinatura->created_at,
-        'texto'       => $assinatura->texto,
-    ]);
+            $status = $verify === 1 ? 'VÁLIDA' : 'INVÁLIDA';
+
+            LogVerificacao::create([
+                'id_assinatura' => $assinaturaRecord->id, 
+                'status' => $status,
+                'ip' => $request->ip(),
+                'agente' => $request->header('User-Agent'),
+            ]);
+        }
+
+        return view('verificacao', [
+            'status' => $status,
+            'assinatura' => $assinaturaRecord,
+        ]);
     }
 }

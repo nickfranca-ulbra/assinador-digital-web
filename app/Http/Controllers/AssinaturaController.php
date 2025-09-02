@@ -41,4 +41,15 @@ class AssinaturaController extends Controller
         $assinatura = Assinatura::findOrFail($id);
         return view('assinatura', compact('assinatura'));
     }
+
+    public function mySignatures()
+    
+{
+    $user = Auth::user();
+    $assinaturas = Assinatura::where('id_user', $user->id)->get();
+
+
+    return view('minhasAssinaturas', compact('assinaturas'));
+}
+
 }
