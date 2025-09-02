@@ -16,7 +16,8 @@
         <button type="submit" class="btn btn-primary w-100">Verificar por ID</button>
     </form>
 
-    <hr>
+    <hr> <p class="text-center m-5">OU INSIRA SOMENTE O TEXTO E A ASSINATURA ABAIXO</p> <hr>
+    
 
     <!-- Verify by Text + Signature -->
     <form action="{{ route('verify.text') }}" method="POST">

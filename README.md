@@ -20,14 +20,26 @@ cp .env.example .env
 Atualize as variáveis de ambiente do arquivo .env
 ```dosini
 APP_NAME=assinador-digital-web
-APP_URL=http://localhost:9001
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
+
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
 
 DB_CONNECTION=mysql
 DB_HOST=db
 DB_PORT=3306
 DB_DATABASE=assinador-digital-web
-DB_USERNAME=root
-DB_PASSWORD=root
+DB_USERNAME=
+DB_PASSWORD=
 
 CACHE_DRIVER=redis
 QUEUE_CONNECTION=redis
@@ -36,31 +48,31 @@ SESSION_DRIVER=redis
 REDIS_HOST=redis
 REDIS_PASSWORD=null
 REDIS_PORT=6379
+
 ```
 
 
 Suba os containers do projeto
 ```sh
-docker-compose up -d
+docker compose up -d
 ```
 Acessar o container
 ```sh
-docker-compose exec assinador-digital-web bash
+docker compose exec assinador-digital-web bash
 ```
 
 Instalar as dependências do projeto
 ```sh
 composer install
 ```
+(Se necessário) Gerar a key do projeto Laravel
+```sh
+php artisan key:generate
+```
 
 Rodar as tabelas do banco
 ```sh
 php artisan migrate
-```
-
-(Se necessário) Gerar a key do projeto Laravel
-```sh
-php artisan key:generate
 ```
 
 
